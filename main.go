@@ -125,12 +125,14 @@ func searchCleanLogTask() {
 					}
 					return
 				} else {
-					err := Zip(id, bakZipFilePath, filePath)
+					log.Println("压缩至:", bakZipFilePath)
+					_, err := exec.Command("/usr/bin/zip", "-r", "-9", bakZipFilePath, filePath).CombinedOutput()
 					if err != nil {
-						log.Println("Zip error:", err)
+						log.Println("bash zip error:", err)
 					} else {
 						_ = ioutil.WriteFile(filePath, []byte{}, info.Mode().Perm())
 					}
+					return
 				}
 
 				time.Sleep(time.Second / 10)
@@ -164,7 +166,7 @@ func main() {
 	}
 
 	searchCleanLogTask()
-	searchCleanBakTask()
+	//searchCleanBakTask()
 
 	_ = nuwa.Http().Run()
 }
